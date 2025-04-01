@@ -74,6 +74,9 @@ class BuildExtension(build_ext):
 
         extra_cmake_args = " -Dkaldifeat_BUILD_TESTS=OFF "
         extra_cmake_args += f" -DCMAKE_INSTALL_PREFIX={Path(self.build_lib).resolve()}/kaldifeat "  # noqa
+        # CUDA architecture seperated by ';'
+        extra_cmake_args += f' -DCMAKE_CUDA_ARCHITECTURES="80;86;89;90;120" '
+        extra_cmake_args += " -DCUDA=ON "
 
         major, minor = get_pytorch_version().split(".")[:2]
         print("major, minor", major, minor)
@@ -120,11 +123,9 @@ class BuildExtension(build_ext):
                 print("Setting make_args to '-j4'")
 
             build_cmd = f"""
+                mkdir -p {self.build_temp}
                 cd {self.build_temp}
-
                 cmake {cmake_args} {kaldifeat_dir}
-
-
                 make {make_args} _kaldifeat install
             """
             print(f"build command is:\n{build_cmd}")

@@ -3,7 +3,7 @@
 # Copyright (c)  2021  Xiaomi Corporation (author: Fangjun Kuang)
 
 import re
-
+import os
 import setuptools
 
 from cmake.cmake_extension import BuildExtension, bdist_wheel, cmake_extension
@@ -12,6 +12,7 @@ import get_version
 
 get_package_version = get_version.get_package_version
 
+os.environ["TORCH_CUDA_ARCH_LIST"] = "8.0;8.6;8.9;9.0;12.0"
 
 def read_long_description():
     with open("README.md", encoding="utf8") as f:
